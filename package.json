@@ -1,7 +1,7 @@
 {
   "name": "broccoli-file-creator",
   "version": "0.1.0",
-  "description": "Broccoli plugin to move a single file.",
+  "description": "Broccoli plugin to create a file.",
   "main": "index.js",
   "author": "Robert Jackson",
   "license": "MIT",
