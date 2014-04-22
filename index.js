@@ -8,9 +8,9 @@ Creator.prototype.constructor = Creator;
 function Creator (options) {
   if (!(this instanceof Creator)) return new Creator(options);
 
-  this.inputTree = inputTree;
   this.content   = options.content;
   this.destFile  = options.destFile;
+  this.fileOptions = options.fileOptions ||  { encoding: 'utf8' };
 };
 
 Creator.prototype.write = function (readTree, destDir) {

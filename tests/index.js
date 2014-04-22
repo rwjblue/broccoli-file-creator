@@ -1,6 +1,6 @@
 'use strict';
 
-var moveFile = require('../index');
+var createFile = require('../index');
 var expect = require('expect.js');
 var rimraf = require('rimraf');
 var root = process.cwd();
@@ -18,29 +18,15 @@ describe('broccoli-file-creator', function(){
   });
 
   it('creates the file specified', function(){
-    var sourcePath = 'tests/fixtures/sample-ember-style-package';
-    var tree = moveFile(sourcePath, {
-      srcFile: '/lib/main.js'
+    var content = 'ZOMG, ZOMG, HOLY MOLY!!!';
+    var tree = createFile({
+      content: content,
+      destFile: '/something.js'
     });
 
     builder = new broccoli.Builder(tree);
     return builder.build().then(function(dir) {
-      expect(fs.existsSync(dir + '/lib/main.js')).to.not.be.ok();
+      expect(fs.readFileSync(dir + '/something.js', {encoding: 'utf8'})).to.eql(content);
     });
   })
-
-  describe('accepts an array of objects as the `files` option', function() {
-    it('deletes all files provided', function(){
-      var sourcePath = 'tests/fixtures/sample-ember-style-package';
-      var tree = moveFile(sourcePath, {
-        files: [ '/lib/main.js', '/lib/core.js']
-      });
-
-      builder = new broccoli.Builder(tree);
-      return builder.build().then(function(dir) {
-        expect(fs.existsSync(dir + '/lib/main.js')).to.not.be.ok();
-        expect(fs.existsSync(dir + '/lib/core.js')).to.not.be.ok();
-      });
-    })
-  });
 });
