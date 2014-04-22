@@ -1,5 +1,7 @@
 # Broccoli's File Creator
 
+[![Build Status](https://travis-ci.org/rjackson/broccoli-file-creator.svg?branch=master)](https://travis-ci.org/rjackson/broccoli-file-creator)
+
 ## Usage
 
 Create a file named `app/main.js` with "some content goes here":
