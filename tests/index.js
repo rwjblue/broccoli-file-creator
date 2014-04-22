@@ -1,6 +1,6 @@
 'use strict';
 
-var createFile = require('../index');
+var writeFile = require('../index');
 var expect = require('expect.js');
 var rimraf = require('rimraf');
 var root = process.cwd();
@@ -19,10 +19,7 @@ describe('broccoli-file-creator', function(){
 
   it('creates the file specified', function(){
     var content = 'ZOMG, ZOMG, HOLY MOLY!!!';
-    var tree = createFile({
-      content: content,
-      destFile: '/something.js'
-    });
+    var tree = writeFile('/something.js', content);
 
     builder = new broccoli.Builder(tree);
     return builder.build().then(function(dir) {

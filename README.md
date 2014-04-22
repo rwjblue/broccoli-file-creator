@@ -1,26 +1,30 @@
-# Broccoli's File Mover
+# Broccoli's File Creator
 
 ## Usage
 
-Removing a single file from `app/main`:
+Create a file named `app/main.js` with "some content goes here":
 
 ```javascript
-var removeFile = require('broccoli-file-remover');
+var writeFile = require('broccoli-file-creator');
 
-var tree = removeFile('app', {
-  srcFile: 'app/main.js'
-});
+var tree = writeFile('/app/main.js', 'some content goes here');
 ```
 
-Removing `app/main` and `test/main`:
+## Documentation
 
-```javacript
-var removeFile = require('broccoli-file-remover');
+### `writeFile(filename, content, fileOptions)`
 
-var tree = removeFile('app', {
-  files: ['app/main.js', 'test/main.js']
-});
-```
+---
+
+`filename` *{String}*
+
+The path of the file to create.
+
+---
+
+`content` *{String}*
+
+The contents to write into the file.
 
 ## ZOMG!!! TESTS?!?!!?
 
@@ -29,25 +33,9 @@ I know, right?
 Running the tests:
 
 ```javascript
+npm install
 npm test
 ```
-
-## Documentation
-
-### `removeFile(inputTree, options)`
-
----
-
-`options.srcFile` *{String}*
-
-The path of the file to remove.
-
----
-
-`options.files` *{Array}*
-
-This allows specifying more than one remove operation at a time (and reduced the total number of trees/steps
-needed if you need to move many files). Each file listed in the array will be removed.
 
 ## License
 

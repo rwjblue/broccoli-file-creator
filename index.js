@@ -5,19 +5,19 @@ var Promise = require('rsvp').Promise
 
 Creator.prototype = Object.create(Writer.prototype);
 Creator.prototype.constructor = Creator;
-function Creator (options) {
-  if (!(this instanceof Creator)) return new Creator(options);
+function Creator (filename, content, options) {
+  if (!(this instanceof Creator)) return new Creator(filename, content, options);
 
-  this.content   = options.content;
-  this.destFile  = options.destFile;
-  this.fileOptions = options.fileOptions ||  { encoding: 'utf8' };
+  this.content   = content;
+  this.filename  = filename;
+  this.fileOptions = options || { encoding: 'utf8' };
 };
 
 Creator.prototype.write = function (readTree, destDir) {
   var _this = this
 
   return Promise.resolve().then(function() {
-    fs.writeFileSync(path.join(destDir, _this.destFile), _this.content, _this.fileOptions);
+    fs.writeFileSync(path.join(destDir, _this.filename), _this.content, _this.fileOptions);
   });
 };
 
