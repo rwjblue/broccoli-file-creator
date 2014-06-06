@@ -19,11 +19,11 @@ describe('broccoli-file-creator', function(){
 
   it('creates the file specified', function(){
     var content = 'ZOMG, ZOMG, HOLY MOLY!!!';
-    var tree = writeFile('/something.js', content);
+    var tree = writeFile('/somewhere/something.js', content);
 
     builder = new broccoli.Builder(tree);
     return builder.build().then(function(dir) {
-      expect(fs.readFileSync(dir + '/something.js', {encoding: 'utf8'})).to.eql(content);
+      expect(fs.readFileSync(dir + '/somewhere/something.js', {encoding: 'utf8'})).to.eql(content);
     });
   })
 });

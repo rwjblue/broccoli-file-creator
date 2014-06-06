@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var mkdirp = require('mkdirp');
 var Writer = require('broccoli-writer');
 var Promise = require('rsvp').Promise
 
@@ -17,7 +18,9 @@ Creator.prototype.write = function (readTree, destDir) {
   var _this = this
 
   return Promise.resolve().then(function() {
-    fs.writeFileSync(path.join(destDir, _this.filename), _this.content, _this.fileOptions);
+    var fileName = path.join(destDir, _this.filename);
+    mkdirp.sync(path.dirname(fileName));
+    fs.writeFileSync(fileName, _this.content, _this.fileOptions);
   });
 };
 
