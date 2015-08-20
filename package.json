@@ -10,21 +10,25 @@
     "url": "https://github.com/rjackson/broccoli-file-creator.git"
   },
   "scripts": {
-    "test": "mocha tests/"
+    "test": "mocha tests/",
+    "test:debug": "mocha debug tests/"
   },
   "keywords": [
     "broccoli-plugin",
     "javascript"
   ],
   "dependencies": {
-    "broccoli-writer": "~0.1.1",
     "broccoli-kitchen-sink-helpers": "~0.2.0",
-    "rsvp": "~3.0.6"
+    "broccoli-plugin": "^1.1.0",
+    "broccoli-writer": "~0.1.1",
+    "mkdirp": "^0.5.1",
+    "rsvp": "~3.0.6",
+    "symlink-or-copy": "^1.0.1"
   },
   "devDependencies": {
-    "mocha": "~1.18.2",
-    "rimraf": "~2.2.6",
-    "broccoli": "~0.9.0",
-    "expect.js": "~0.3.1"
+    "broccoli": "^0.16.7",
+    "chai": "^3.2.0",
+    "mocha": "^2.2.5",
+    "rimraf": "~2.2.6"
   }
 }
