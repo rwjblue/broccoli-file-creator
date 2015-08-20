@@ -1,7 +1,8 @@
 'use strict';
 
 var writeFile = require('../index');
-var expect = require('expect.js');
+var chai = require('chai');
+var expect = chai.expect;
 var rimraf = require('rimraf');
 var root = process.cwd();
 
@@ -9,6 +10,26 @@ var fs = require('fs');
 var broccoli = require('broccoli');
 
 var builder;
+
+chai.Assertion.addMethod('sameStatAs', function(otherStat) {
+  this.assert(
+    this._obj.mode === otherStat.mode,
+    'expected mode ' + this._obj.mode + ' to be same as ' + otherStat.mode,
+    'expected mode ' + this._obj.mode + ' to not the same as ' + otherStat.mode
+  );
+
+  this.assert(
+    this._obj.size === otherStat.size,
+    'expected size ' + this._obj.size + ' to be same as ' + otherStat.size,
+    'expected size ' + this._obj.size + ' to not the same as ' + otherStat.size
+  );
+
+  this.assert(
+    this._obj.mtime.getTime() === otherStat.mtime.getTime(),
+    'expected mtime ' + this._obj.mtime.getTime() + ' to be same as ' + otherStat.mtime.getTime(),
+    'expected mtime ' + this._obj.mtime.getTime() + ' to not the same as ' + otherStat.mtime.getTime()
+  );
+});
 
 describe('broccoli-file-creator', function(){
   afterEach(function() {
@@ -22,8 +43,28 @@ describe('broccoli-file-creator', function(){
     var tree = writeFile('/something.js', content);
 
     builder = new broccoli.Builder(tree);
-    return builder.build().then(function(dir) {
-      expect(fs.readFileSync(dir + '/something.js', {encoding: 'utf8'})).to.eql(content);
+
+    return builder.build().then(function(result) {
+      expect(fs.readFileSync(result.directory + '/something.js', {encoding: 'utf8'})).to.eql(content);
     });
-  })
+  });
+
+  it('correctly caches', function(){
+    var content = 'ZOMG, ZOMG, HOLY MOLY!!!';
+    var tree = writeFile('/something.js', content);
+
+    builder = new broccoli.Builder(tree);
+
+    var stat;
+    return builder.build().then(function(result) {
+      stat = fs.lstatSync(result.directory + '/something.js');
+      debugger;
+      return builder.build();
+    }).then(function(result){
+      stat;
+      var newStat = fs.lstatSync(result.directory + '/something.js');
+
+      expect(newStat).to.be.sameStatAs(stat);
+    });
+  });
 });

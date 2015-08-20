@@ -1,24 +1,44 @@
 var fs = require('fs');
 var path = require('path');
-var Writer = require('broccoli-writer');
-var Promise = require('rsvp').Promise
-
-Creator.prototype = Object.create(Writer.prototype);
-Creator.prototype.constructor = Creator;
-function Creator (filename, content, options) {
-  if (!(this instanceof Creator)) return new Creator(filename, content, options);
-
-  this.content   = content;
-  this.filename  = filename;
-  this.fileOptions = options || { encoding: 'utf8' };
-};
-
-Creator.prototype.write = function (readTree, destDir) {
-  var _this = this
-
-  return Promise.resolve().then(function() {
-    fs.writeFileSync(path.join(destDir, _this.filename), _this.content, _this.fileOptions);
-  });
-};
+var Plugin = require('broccoli-plugin');
+var symlinkOrCopySync = require('symlink-or-copy').sync;
+var mkdirp = require('mkdirp');
 
 module.exports = Creator;
+Creator.prototype = Object.create(Plugin.prototype);
+Creator.prototype.constructor = Creator;
+
+function Creator (filename, content, _options) {
+  if (!(this instanceof Creator)) return new Creator(filename, content, options);
+  var options = _options || { encoding: 'utf8' };
+
+  Plugin.call(this, [/* no inputTrees */], {
+    annotation: options.annotation || this.constructor.name + ' ' + filename
+  });
+
+  delete options.annotation;
+
+  this.content = content;
+  this.filename = filename;
+  this.fileOptions = options;
+};
+
+Creator.prototype.build = function () {
+  var cacheFilePath = path.join(this.cachePath, this.filename);
+  var outputFilePath = path.join(this.outputPath, this.filename);
+
+  writeToCache(cacheFilePath, this.content, this.fileOptions);
+  linkFromCache(cacheFilePath, outputFilePath);
+};
+
+function writeToCache(cacheFilePath, content, options) {
+  if (fs.existsSync(cacheFilePath)) { return; }
+  mkdirp.sync(path.dirname(cacheFilePath));
+  fs.writeFileSync(cacheFilePath, content, options);
+}
+
+function linkFromCache(from, to) {
+  mkdirp.sync(path.dirname(to.outputFile));
+
+  symlinkOrCopySync(from, to);
+}
