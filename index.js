@@ -38,7 +38,7 @@ function writeToCache(cacheFilePath, content, options) {
 }
 
 function linkFromCache(from, to) {
-  mkdirp.sync(path.dirname(to.outputFile));
+  mkdirp.sync(path.dirname(to));
 
   symlinkOrCopySync(from, to);
 }

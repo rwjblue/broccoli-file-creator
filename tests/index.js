@@ -49,6 +49,17 @@ describe('broccoli-file-creator', function(){
     });
   });
 
+  it('creates the file specified in a non-existent directory', function(){
+    var content = 'ZOMG, ZOMG, HOLY MOLY!!!';
+    var tree = writeFile('/somewhere/something.js', content);
+
+    builder = new broccoli.Builder(tree);
+
+    return builder.build().then(function(result) {
+      expect(fs.readFileSync(result.directory + '/somewhere/something.js', {encoding: 'utf8'})).to.eql(content);
+    });
+  });
+
   it('correctly caches', function(){
     var content = 'ZOMG, ZOMG, HOLY MOLY!!!';
     var tree = writeFile('/something.js', content);
