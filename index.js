@@ -9,8 +9,8 @@ Creator.prototype = Object.create(Plugin.prototype);
 Creator.prototype.constructor = Creator;
 
 function Creator (filename, content, _options) {
-  if (!(this instanceof Creator)) return new Creator(filename, content, options);
   var options = _options || { encoding: 'utf8' };
+  if (!(this instanceof Creator)) return new Creator(filename, content, _options);
 
   Plugin.call(this, [/* no inputTrees */], {
     annotation: options.annotation || this.constructor.name + ' ' + filename
