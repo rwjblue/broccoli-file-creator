@@ -18,7 +18,8 @@ function Creator (filename, content, _options) {
   }
 
   Plugin.call(this, [/* no inputTrees */], {
-    annotation: options.annotation || this.constructor.name + ' ' + filename
+    annotation: options.annotation || this.constructor.name + ' ' + filename,
+    persistentOutput: true
   });
 
   delete options.annotation;
@@ -26,24 +27,16 @@ function Creator (filename, content, _options) {
   this.content = content;
   this.filename = filename;
   this.fileOptions = options;
-};
+}
 
 Creator.prototype.build = function () {
-  var cacheFilePath = path.join(this.cachePath, this.filename);
   var outputFilePath = path.join(this.outputPath, this.filename);
 
-  writeToCache(cacheFilePath, this.content, this.fileOptions);
-  linkFromCache(cacheFilePath, outputFilePath);
+  if (fs.existsSync(outputFilePath)) {
+    return;
+  }
+
+  mkdirp.sync(path.dirname(outputFilePath));
+
+  fs.writeFileSync(outputFilePath, this.content, this.fileOptions);
 };
-
-function writeToCache(cacheFilePath, content, options) {
-  if (fs.existsSync(cacheFilePath)) { return; }
-  mkdirp.sync(path.dirname(cacheFilePath));
-  fs.writeFileSync(cacheFilePath, content, options);
-}
-
-function linkFromCache(from, to) {
-  mkdirp.sync(path.dirname(to));
-
-  symlinkOrCopySync(from, to);
-}
