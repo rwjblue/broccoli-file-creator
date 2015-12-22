@@ -69,7 +69,6 @@ describe('broccoli-file-creator', function(){
     var stat;
     return builder.build().then(function(result) {
       stat = fs.lstatSync(result.directory + '/something.js');
-      debugger;
       return builder.build();
     }).then(function(result){
       stat;
