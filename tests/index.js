@@ -38,6 +38,9 @@ describe('broccoli-file-creator', function(){
     }
   });
 
+  function read(path) {
+    return fs.readFileSync(path, 'UTF8');
+  }
   it('creates the file specified', function(){
     var content = 'ZOMG, ZOMG, HOLY MOLY!!!';
     var tree = writeFile('/something.js', content);
@@ -45,7 +48,7 @@ describe('broccoli-file-creator', function(){
     builder = new broccoli.Builder(tree);
 
     return builder.build().then(function(result) {
-      expect(fs.readFileSync(result.directory + '/something.js', {encoding: 'utf8'})).to.eql(content);
+      expect(read(result.directory + '/something.js')).to.eql(content);
     });
   });
 
@@ -56,7 +59,7 @@ describe('broccoli-file-creator', function(){
     builder = new broccoli.Builder(tree);
 
     return builder.build().then(function(result) {
-      expect(fs.readFileSync(result.directory + '/somewhere/something.js', {encoding: 'utf8'})).to.eql(content);
+      expect(read(result.directory + '/somewhere/something.js')).to.eql(content);
     });
   });
 
@@ -67,11 +70,11 @@ describe('broccoli-file-creator', function(){
     builder = new broccoli.Builder(tree);
 
     var stat;
+
     return builder.build().then(function(result) {
       stat = fs.lstatSync(result.directory + '/something.js');
       return builder.build();
     }).then(function(result){
-      stat;
       var newStat = fs.lstatSync(result.directory + '/something.js');
 
       expect(newStat).to.be.sameStatAs(stat);
