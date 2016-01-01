@@ -1,6 +1,6 @@
 # Broccoli's File Creator
 
-[![Build Status](https://travis-ci.org/rjackson/broccoli-file-creator.svg?branch=master)](https://travis-ci.org/rjackson/broccoli-file-creator)
+[![Build Status](https://travis-ci.org/rwjblue/broccoli-file-creator.svg?branch=master)](https://travis-ci.org/rjackson/broccoli-file-creator)
 
 ## Usage
 
