@@ -21,11 +21,11 @@
     "javascript"
   ],
   "dependencies": {
-    "broccoli-kitchen-sink-helpers": "~0.2.0",
+    "broccoli-kitchen-sink-helpers": "^0.3.1",
     "broccoli-plugin": "^1.1.0",
-    "broccoli-writer": "~0.1.1",
+    "broccoli-writer": "^0.1.1",
     "mkdirp": "^0.5.1",
-    "rsvp": "~3.0.6",
+    "rsvp": "^3.0.6",
     "symlink-or-copy": "^1.0.1"
   },
   "devDependencies": {
