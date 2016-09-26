@@ -24,7 +24,7 @@
     "broccoli-kitchen-sink-helpers": "^0.3.1",
     "broccoli-plugin": "^1.1.0",
     "mkdirp": "^0.5.1",
-    "rsvp": "^3.0.6",
+    "rsvp": "^3.3.2",
     "symlink-or-copy": "^1.0.1"
   },
   "devDependencies": {

@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var Plugin = require('broccoli-plugin');
+var RSVP = require('rsvp');
 var symlinkOrCopySync = require('symlink-or-copy').sync;
 var mkdirp = require('mkdirp');
 
@@ -29,8 +30,17 @@ function Creator (filename, content, _options) {
   this.fileOptions = options;
 }
 
+Creator.prototype.getContent = function() {
+  var plugin = this;
+
+  return new RSVP.Promise(function(resolve) {
+    resolve(plugin.content);
+  });
+}
+
 Creator.prototype.build = function () {
   var outputFilePath = path.join(this.outputPath, this.filename);
+  var plugin = this;
 
   if (fs.existsSync(outputFilePath)) {
     return;
@@ -38,5 +48,9 @@ Creator.prototype.build = function () {
 
   mkdirp.sync(path.dirname(outputFilePath));
 
-  fs.writeFileSync(outputFilePath, this.content, this.fileOptions);
+  return new RSVP.Promise(function(resolve) {
+    resolve(plugin.getContent());
+  }).then(function(content) {
+    fs.writeFileSync(outputFilePath, content, plugin.fileOptions);
+  });
 };
