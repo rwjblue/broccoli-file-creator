@@ -64,6 +64,17 @@ describe('broccoli-file-creator', function() {
     });
   });
 
+  it('if the content is a function, that functions return value or fulfillment value is used', function() {
+    const CONTENT = 'ZOMG, ZOMG, HOLY MOLY!!!';
+    const tree = writeFile('the-file.txt', () => Promise.resolve(CONTENT));
+
+    builder = new broccoli.Builder(tree);
+
+    return builder.build().then(result => {
+      expect(read(result.directory + '/the-file.txt')).to.eql(CONTENT);
+    });
+  });
+
   it('correctly caches', function() {
     const content = 'ZOMG, ZOMG, HOLY MOLY!!!';
     const tree = writeFile('/something.js', content);
