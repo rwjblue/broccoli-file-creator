@@ -1,7 +1,8 @@
+'use strict';
+
 var fs = require('fs');
 var path = require('path');
 var Plugin = require('broccoli-plugin');
-var symlinkOrCopySync = require('symlink-or-copy').sync;
 var mkdirp = require('mkdirp');
 
 module.exports = Creator;
@@ -27,16 +28,17 @@ function Creator (filename, content, _options) {
   this.content = content;
   this.filename = filename;
   this.fileOptions = options;
+
+  this._built = false;
 }
 
 Creator.prototype.build = function () {
-  var outputFilePath = path.join(this.outputPath, this.filename);
-
-  if (fs.existsSync(outputFilePath)) {
+  if (this._built) {
     return;
   }
 
+  var outputFilePath = path.join(this.outputPath, this.filename);
   mkdirp.sync(path.dirname(outputFilePath));
-
   fs.writeFileSync(outputFilePath, this.content, this.fileOptions);
+  this._built = true;
 };
