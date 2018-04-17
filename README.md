@@ -7,9 +7,8 @@
 Create a file named `app/main.js` with "some content goes here":
 
 ```javascript
-var writeFile = require('broccoli-file-creator');
-
-var tree = writeFile('/app/main.js', 'some content goes here');
+let writeFile = require('broccoli-file-creator');
+let tree = writeFile('/app/main.js', 'some content goes here');
 ```
 
 ## Documentation
@@ -28,7 +27,7 @@ The path of the file to create.
 
 The contents to write into the file.
 
-```
+```js
 writeFile('filename.txt', 'the-content');
 writeFile('filename.txt', Promise.resolve('the-content'));
 writeFile('filename.txt', () => 'the-content');
