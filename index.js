@@ -34,9 +34,13 @@ class Creator extends Plugin {
 
     const outputFilePath = path.join(this.outputPath, this.filename);
     mkdirp.sync(path.dirname(outputFilePath));
-    fs.writeFileSync(outputFilePath, this.content, this.fileOptions);
 
-    this._built = true;
+    return new Promise(resolve => {
+      resolve(typeof this.content === 'function' ? this.content() : this.content);
+    }).then(content => {
+      fs.writeFileSync(outputFilePath, content, this.fileOptions);
+      this._built = true;
+    });
   }
 };
 

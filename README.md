@@ -24,9 +24,18 @@ The path of the file to create.
 
 ---
 
-`content` *{String}*
+`content` *{String|Function|Promise}*
 
 The contents to write into the file.
+
+```
+writeFile('filename.txt', 'the-content');
+writeFile('filename.txt', Promise.resolve('the-content'));
+writeFile('filename.txt', () => 'the-content');
+writeFile('filename.txt', () => Promise.resolve('the-content'));
+```
+
+*note: If a function is provided, it will only be invoked once, on first build*
 
 ## ZOMG!!! TESTS?!?!!?
 
