@@ -1,44 +1,43 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var Plugin = require('broccoli-plugin');
-var mkdirp = require('mkdirp');
+const fs = require('fs');
+const path = require('path');
+const Plugin = require('broccoli-plugin');
+const mkdirp = require('mkdirp');
 
-module.exports = Creator;
-Creator.prototype = Object.create(Plugin.prototype);
-Creator.prototype.constructor = Creator;
-
-function Creator (filename, content, _options) {
-  var options = _options || {
-    encoding: 'utf8'
-  };
-
-  if (!(this instanceof Creator)) {
-    return new Creator(filename, content, options);
-  }
-
-  Plugin.call(this, [/* no inputTrees */], {
-    annotation: options.annotation || this.constructor.name + ' ' + filename,
-    persistentOutput: true
-  });
-
-  delete options.annotation;
-
-  this.content = content;
-  this.filename = filename;
-  this.fileOptions = options;
-
-  this._built = false;
-}
-
-Creator.prototype.build = function () {
-  if (this._built) {
-    return;
-  }
-
-  var outputFilePath = path.join(this.outputPath, this.filename);
-  mkdirp.sync(path.dirname(outputFilePath));
-  fs.writeFileSync(outputFilePath, this.content, this.fileOptions);
-  this._built = true;
+module.exports = function(filename, content, options) {
+  return new Creator(filename, content, options);
 };
+
+class Creator extends Plugin {
+  constructor (filename, content, _options) {
+    const options = _options || {
+      encoding: 'utf8'
+    };
+
+    super([], {
+      annotation: options.annotation || constructor.name + filename,
+      persistentOutput: true
+    });
+
+    this.content = content;
+    this.filename = filename;
+    this.fileOptions = options;
+
+    this._built = false;
+  }
+
+  build() {
+    if (this._built) {
+      return;
+    }
+
+    const outputFilePath = path.join(this.outputPath, this.filename);
+    mkdirp.sync(path.dirname(outputFilePath));
+    fs.writeFileSync(outputFilePath, this.content, this.fileOptions);
+
+    this._built = true;
+  }
+};
+
+module.exports.Class = Creator;

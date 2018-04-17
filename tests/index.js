@@ -1,15 +1,15 @@
 'use strict';
 
-var writeFile = require('../index');
-var chai = require('chai');
-var expect = chai.expect;
-var rimraf = require('rimraf');
-var root = process.cwd();
+const writeFile = require('../index');
+const chai = require('chai');
+const expect = chai.expect;
+const rimraf = require('rimraf');
+const root = process.cwd();
 
-var fs = require('fs');
-var broccoli = require('broccoli');
+const fs = require('fs');
+const broccoli = require('broccoli');
 
-var builder;
+let builder;
 
 chai.Assertion.addMethod('sameStatAs', function(otherStat) {
   this.assert(
@@ -31,7 +31,7 @@ chai.Assertion.addMethod('sameStatAs', function(otherStat) {
   );
 });
 
-describe('broccoli-file-creator', function(){
+describe('broccoli-file-creator', function() {
   afterEach(function() {
     if (builder) {
       builder.cleanup();
@@ -41,40 +41,41 @@ describe('broccoli-file-creator', function(){
   function read(path) {
     return fs.readFileSync(path, 'UTF8');
   }
-  it('creates the file specified', function(){
-    var content = 'ZOMG, ZOMG, HOLY MOLY!!!';
-    var tree = writeFile('/something.js', content);
+
+  it('creates the file specified', function() {
+    const content = 'ZOMG, ZOMG, HOLY MOLY!!!';
+    const tree = writeFile('/something.js', content);
 
     builder = new broccoli.Builder(tree);
 
-    return builder.build().then(function(result) {
+    return builder.build().then(result => {
       expect(read(result.directory + '/something.js')).to.eql(content);
     });
   });
 
-  it('creates the file specified in a non-existent directory', function(){
-    var content = 'ZOMG, ZOMG, HOLY MOLY!!!';
-    var tree = writeFile('/somewhere/something.js', content);
+  it('creates the file specified in a non-existent directory', function() {
+    const content = 'ZOMG, ZOMG, HOLY MOLY!!!';
+    const tree = writeFile('/somewhere/something.js', content);
 
     builder = new broccoli.Builder(tree);
 
-    return builder.build().then(function(result) {
+    return builder.build().then(result => {
       expect(read(result.directory + '/somewhere/something.js')).to.eql(content);
     });
   });
 
-  it('correctly caches', function(){
-    var content = 'ZOMG, ZOMG, HOLY MOLY!!!';
-    var tree = writeFile('/something.js', content);
+  it('correctly caches', function() {
+    const content = 'ZOMG, ZOMG, HOLY MOLY!!!';
+    const tree = writeFile('/something.js', content);
 
     builder = new broccoli.Builder(tree);
 
     var stat;
 
-    return builder.build().then(function(result) {
+    return builder.build().then(result =>  {
       stat = fs.lstatSync(result.directory + '/something.js');
       return builder.build();
-    }).then(function(result){
+    }).then(result => {
       var newStat = fs.lstatSync(result.directory + '/something.js');
 
       expect(newStat).to.be.sameStatAs(stat);
